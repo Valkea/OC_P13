@@ -161,35 +161,27 @@ Une fois sur la page de gestion de votre projet sur CircleCI, utilisez le bouton
 
 #### Utiliser le container Docker-Hub en local
 
-Pour utiliser le container envoyé sur Docker-Hub en local il vous faut d'abord mettre en place quelques variables d'énvironnement :
+Pour utiliser le container envoyé sur Docker-Hub en local il vous faut d'abord mettre en place la variable d'environnement pour Sentry (ou la passer en parametere avec -e "SENTRY_DSN={private_sentry_url}") :
 
 ```bash
 >>> export SENTRY_DSN={La même chose que pour CircleCI}
->>> export DEBUG=1
 ```
 
 Puis utiliser la commande suivante pour récupèrer le conteneur et le lancer:
 
 ```bash
->>> docker run --pull always -d -e "PORT=8000" -e SENTRY_DSN -e DEBUG -p 80:8000 DOCKER_LOGIN/PROJECT_REPONAME
+>>> docker run --pull always -d -e SENTRY_DSN -p 80:8000 --name oc_let DOCKER_LOGIN/PROJECT_REPONAME
 ```
 
 > Vous pouvez essayer avec le repo `valkea/oc-lettings` mais il vous faudra tout de même les variables d'environnement, sinon le conteneur ne se lancera pas...
-> `docker run --pull always -d -e "PORT=8000" -e SENTRY_DSN -e DEBUG -p 80:8000 valkea/oc-lettings:latest`
+> `docker run --pull always -d -e SENTRY_DSN -p 80:8000 --name oc_let valkea/oc-lettings:latest`
 
 Pour vérifier qu'il fonctionne bien vous pouvez visitez l'url suivante : [http://127.0.0.1](http://127.0.0.1)
 
-Enfin, une fois terminé, recupèrer l'ID du container avec :
+Enfin, une fois terminé, fermez le avec la commande suivante :
 
 ```bash
->>> docker ps -a
-```
-
-et fermez le avec la commande suivante :
-
-```bash
->>> docker stop {containerID}
->>> docker system prune # pour nettoyer, mais non obligatoire
+>>> docker stop oc_let
 ```
 
 ### Windows
